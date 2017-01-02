@@ -255,7 +255,11 @@ function delete_record() {
   fclose($fp);
   $c = "nsupdate -v ".$nsupdate_file." 2>&1";
   exec($c, $o, $e);
-  log_this($host." IN ".$type." ".$target." deleted");
+  if ($e == 0) {
+    log_this($host." IN ".$type." ".$target." deleted");
+  } else {
+    log_this("Failed to delete ".$host." IN ".$type." ".$target.".");
+  }
   unlink($nsupdate_file);
   foreach($o as $ent) { $ret['message'][] = $ent; }
   if ($e) { $ret['ok'] = false; };
@@ -320,7 +324,11 @@ function add_record() {
   fclose($fp);
   $c = "nsupdate -v ".$nsupdate_file." 2>&1";
   exec($c, $o, $e);
-  log_this($host.".".$zone.". IN ".$type." ".$target." added.");
+  if ($e == 0) {
+    log_this($host.".".$zone.". IN ".$type." ".$target." added.");
+  } else {
+    log_this("Failed to add ".$host.".".$zone.". IN ".$type." ".$target.".");
+  }
   unlink($nsupdate_file);
   foreach($o as $ent) { $ret['message'][] = $ent; }
   if ($e) { $ret['ok'] = false; };
